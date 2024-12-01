@@ -44,5 +44,12 @@ export const ContentContainer = styled.View`
   gap: 16px;
 `;
 
+export const Title = styled.Text`
+    font-size: 20px;
+    font-weight: bold;
+    color: ${({ theme }) => theme.COLORS.BLUE};
+    text-align: center;
+    margin: 20px 0;
+`;
 
 
