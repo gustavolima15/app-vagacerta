@@ -85,7 +85,7 @@ function AppNavigator() {
   }, []);
 
   if (loading) {
-    return null; // Você pode colocar um splash screen aqui
+    return null;
   }
 
   return (

@@ -19,7 +19,6 @@ export default function FormScreen({navigation}) {
             return;
         }
         try {
-            // Enviando os dados para a API
             const response = await api.post('/usuarios', { 
                 nome: name, 
                 email: email, 
