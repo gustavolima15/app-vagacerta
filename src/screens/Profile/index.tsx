@@ -15,50 +15,40 @@ import Input from '../../components/Input'
 import { Button } from '../../components/Button';
 
 
-export default function Profile({navigation }) {
-    const [id, setId] = useState(null);
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+//função de edição
+export default function Profile({navigation }) { 
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                // Recupera o usuário do AsyncStorage
-                const jsonValue = await AsyncStorage.getItem('user');
-                const user = JSON.parse(jsonValue);
-                const response = await api.get(/usuarios/${user.id});
-                const userData = response.data;
 
-                // Atualiza os estados com os dados do usuário
-                setId(userData.id);
-                setName(userData.nome);
-                setEmail(userData.email);
-            } catch (e) {
-                console.error('Erro ao buscar dados do usuário:', e);
-            }
-        };
-
-        getData();
-    }, []);
-    const handleLogout = async () => {
+    //edição de usuario
+    const handleUpdate = async () => {
         try {
-            // Remove os dados do AsyncStorage
-            await AsyncStorage.removeItem('token');
-            await AsyncStorage.removeItem('user');
+            const jsonValue = await AsyncStorage.getItem('user');
+            const user = JSON.parse(jsonValue);
+            const id = user.id;
 
-            // Redireciona para a tela de login
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Login' }],
-            });
+            const response = await api.put(/usuarios/${id}, 
+                { 
+                    nome: name, 
+                    email: email, 
+                    senha: password 
+                }
+            );
 
-            Alert.alert('Logout realizado com sucesso!');
+            const updatedUser = response.data.user;
+
+            await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
+            setName(updatedUser.nome);
+            setEmail(updatedUser.email);
+
+
+            alert('Informações atualizadas com sucesso!');
         } catch (error) {
-            console.error('Erro ao realizar logout:', error);
-            Alert.alert('Erro ao realizar logout. Tente novamente.');
+            console.error('Erro ao atualizar os dados do usuário:', error);
+            alert('Erro ao atualizar as informações. Tente novamente.');
         }
     };
+
+
     return (
         <Wrapper>
             <Header>
