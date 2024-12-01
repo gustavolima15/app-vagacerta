@@ -16,6 +16,32 @@ import { Button } from '../../components/Button';
 
 
 export default function Profile({navigation }) {
+    const [id, setId] = useState(null);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                // Recupera o usuário do AsyncStorage
+                const jsonValue = await AsyncStorage.getItem('user');
+                const user = JSON.parse(jsonValue);
+                const response = await api.get(/usuarios/${user.id});
+                const userData = response.data;
+
+                // Atualiza os estados com os dados do usuário
+                setId(userData.id);
+                setName(userData.nome);
+                setEmail(userData.email);
+            } catch (e) {
+                console.error('Erro ao buscar dados do usuário:', e);
+            }
+        };
+
+        getData();
+    }, []);
+
     const handleUpdate = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('user');
@@ -41,6 +67,25 @@ export default function Profile({navigation }) {
         } catch (error) {
             console.error('Erro ao atualizar os dados do usuário:', error);
             alert('Erro ao atualizar as informações. Tente novamente.');
+
+    
+    const handleLogout = async () => {
+        try {
+            // Remove os dados do AsyncStorage
+            await AsyncStorage.removeItem('token');
+            await AsyncStorage.removeItem('user');
+
+            // Redireciona para a tela de login
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+            });
+
+            Alert.alert('Logout realizado com sucesso!');
+        } catch (error) {
+            console.error('Erro ao realizar logout:', error);
+            Alert.alert('Erro ao realizar logout. Tente novamente.');
+
         }
     };
     return (
