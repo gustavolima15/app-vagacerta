@@ -18,7 +18,7 @@ export default function List() {
     const fetchVagas = async () => {
       try {
         const response = await api.get('/vagas');
-        setVagas(response.data);
+        setVagas(response.data.jobs);
       } catch (error) {
         console.error(error);
       } finally {
@@ -53,6 +53,7 @@ export default function List() {
               title={item.titulo}
               dataCreated={item.dataCadastro}
               company={item.empresa}
+              status={item.status}
                 />
               }
               showsVerticalScrollIndicator={true}

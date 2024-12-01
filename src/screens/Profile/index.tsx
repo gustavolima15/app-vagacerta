@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { 
     Wrapper,
@@ -13,6 +13,10 @@ import Logo from '../../components/Logo';
 import theme from '../../theme';
 import Input from '../../components/Input'
 import { Button } from '../../components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from '../../services/api';
+import { Alert } from 'react-native';
+import { Title } from '../Details/styles';
 
 
 export default function Profile({navigation }) {
@@ -27,7 +31,7 @@ export default function Profile({navigation }) {
                 // Recupera o usuário do AsyncStorage
                 const jsonValue = await AsyncStorage.getItem('user');
                 const user = JSON.parse(jsonValue);
-                const response = await api.get(/usuarios/${user.id});
+                const response = await api.get(`usuarios/${user.id}`);
                 const userData = response.data;
 
                 // Atualiza os estados com os dados do usuário
@@ -48,7 +52,7 @@ export default function Profile({navigation }) {
             const user = JSON.parse(jsonValue);
             const id = user.id;
 
-            const response = await api.put(/usuarios/${id}, 
+            const response = await api.put(`/usuarios/${id}`, 
                 { 
                     nome: name, 
                     email: email, 
@@ -68,7 +72,8 @@ export default function Profile({navigation }) {
             console.error('Erro ao atualizar os dados do usuário:', error);
             alert('Erro ao atualizar as informações. Tente novamente.');
 
-    
+        }
+    }
     const handleLogout = async () => {
         try {
             // Remove os dados do AsyncStorage
@@ -88,6 +93,7 @@ export default function Profile({navigation }) {
 
         }
     };
+    
     return (
         <Wrapper>
             <Header>
@@ -102,18 +108,43 @@ export default function Profile({navigation }) {
                 <Logo />
             </Header>
 
+            <Title>Atualizar Cadastro</Title>
+
             <Container>
                 <ContentContainer>
-                    <Input label='Nome' placeholder='digite seu nome'/>
-                    <Input label='E-mail' placeholder='digite seu e-mail'/>
-                    <Input label='Senha' placeholder='digite sua senha'/>
+                    <Input 
+                        label="Nome" 
+                        placeholder="Digite seu nome" 
+                        value={name} 
+                        onChangeText={setName} 
+                    />
+                    <Input 
+                        label="E-mail" 
+                        placeholder="Digite seu e-mail" 
+                        value={email} 
+                        onChangeText={setEmail} 
+                    />
+                    <Input 
+                        label="Senha" 
+                        placeholder="Digite sua nova senha" 
+                        value={password} 
+                        onChangeText={setPassword} 
+                        secureTextEntry 
+                    />
                 </ContentContainer>
 
                 <Button 
                     title="Salvar informações" 
                     noSpacing={true} 
-                    variant='primary'
-                    />
+                    variant="primary" 
+                    onPress={handleUpdate}
+                />
+                <Button 
+                    title="Sair" 
+                    noSpacing={true} 
+                    variant="primary" 
+                    onPress={handleLogout}
+                />
             </Container>
         </Wrapper>
     );

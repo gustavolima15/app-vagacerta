@@ -52,3 +52,13 @@ export const OpenButton = styled.View`
     justify-content: center;
     height: 100%;
 `;
+
+export const ContactButton = styled.TouchableOpacity`
+  background-color: #3D6CB9;
+  padding: 10px 15px;
+  border-radius: 8px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+`;

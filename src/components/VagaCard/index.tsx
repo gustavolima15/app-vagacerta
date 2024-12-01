@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { Container, Content, OpenButton, Title, Data, Company } from './styles';
+import { Container, Content, OpenButton, Title, Data, Company, ContactButton } from './styles';
 import { Feather } from '@expo/vector-icons';
 
 import { RootStackParamList } from '../../utils/Types';
@@ -30,7 +30,7 @@ export default function VagaCard({ id, title, dataCreated, company, status }: Da
   
         {/* Exiba o botão de contato apenas se o status for "aberta" */}
         {status === 'aberta' && (
-          <ContactButton onPress={() => console.log(Entrando em contato para a vaga ${id})}>
+          <ContactButton onPress={() => console.log(`Entrando em contato para a vaga ${id}`)}>
             <Feather name="mail" size={24} color={'#FFF'} />
           </ContactButton>
         )}

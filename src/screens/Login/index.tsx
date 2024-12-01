@@ -7,6 +7,8 @@ import BGTop from '../../assets/BGTop.png';
 import Logo from '../../components/Logo';
 import Input from '../../components/Input';
 import { Button } from '../../components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../../contexts/AuthContext';
 
 
 export default function Login({ navigation }) {
@@ -14,7 +16,7 @@ export default function Login({ navigation }) {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-
+    const { setUser, setToken } = useAuth();
 
     const handleLogin = async () => {
       try {
