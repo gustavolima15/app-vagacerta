@@ -15,7 +15,7 @@ import Input from '../../components/Input'
 import { Button } from '../../components/Button';
 
 
-
+//função de edição
 export default function Profile({navigation }) {
     const handleUpdate = async () => {
         try {
