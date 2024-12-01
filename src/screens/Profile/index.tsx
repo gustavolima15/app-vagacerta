@@ -16,7 +16,24 @@ import { Button } from '../../components/Button';
 
 
 export default function Profile({navigation }) {
+    const handleLogout = async () => {
+        try {
+            // Remove os dados do AsyncStorage
+            await AsyncStorage.removeItem('token');
+            await AsyncStorage.removeItem('user');
 
+            // Redireciona para a tela de login
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+            });
+
+            Alert.alert('Logout realizado com sucesso!');
+        } catch (error) {
+            console.error('Erro ao realizar logout:', error);
+            Alert.alert('Erro ao realizar logout. Tente novamente.');
+        }
+    };
     return (
         <Wrapper>
             <Header>
