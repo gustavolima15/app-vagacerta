@@ -17,26 +17,27 @@ export default function Login({ navigation }) {
 
 
     const handleLogin = async () => {
-        try {
-          const response = await api.get('/usuarios');
-          const users = response.data;
-          console.log(users);
-    
-          const user = users.find(u => u.email === email && u.senha === senha);
-    
-          if (user) {
-            console.log('Login successful', `Welcome, ${user.nome}!`);
-            navigation.navigate('Auth', { screen: 'Home' });
-            // Navegue para a próxima tela ou faça outras ações necessárias
-            // navigation.navigate('NextScreen');
-          } else {
-            console.log('Login failed', 'Email or password is incorrect');
-          }
-        } catch (error) {
-          console.error(error);
-          console.log('Login failed', 'An error occurred during login');
+      try {
+        const response = await api.post('/usuarios/login', { email, senha });
+        const { token, user } = response.data;
+
+        if (user) {
+          const jsonValue = JSON.stringify(user);
+          await AsyncStorage.setItem('user', jsonValue);
+          await AsyncStorage.setItem('token', token);
+
+          setUser(user);
+          setToken(token);
+
+          navigation.navigate('Auth', { screen: 'Home' });
+        } else {
+          console.log('Login failed', 'Email or password is incorrect');
         }
-      };
+      } catch (error) {
+        console.error(error);
+        console.log('Login failed', 'An error occurred during login');
+      }
+    };
 
     return (
         <Wrapper>
