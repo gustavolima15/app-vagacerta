@@ -57,7 +57,7 @@ export default function Details({route, navigation }) {
         console.log('WhatsApp Opened');
       })
       .catch(() => {
-        alert('Make sure Whatsapp installed on your device');
+        alert('Faça a instalação do Whatsapp em seu dispositivo');
       });
     }
     
