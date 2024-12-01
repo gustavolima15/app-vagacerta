@@ -41,6 +41,34 @@ export default function Profile({navigation }) {
 
         getData();
     }, []);
+
+    const handleUpdate = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('user');
+            const user = JSON.parse(jsonValue);
+            const id = user.id;
+
+            const response = await api.put(/usuarios/${id}, 
+                { 
+                    nome: name, 
+                    email: email, 
+                    senha: password 
+                }
+            );
+
+            const updatedUser = response.data.user;
+
+            await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
+            setName(updatedUser.nome);
+            setEmail(updatedUser.email);
+
+
+            alert('Informações atualizadas com sucesso!');
+        } catch (error) {
+            console.error('Erro ao atualizar os dados do usuário:', error);
+            alert('Erro ao atualizar as informações. Tente novamente.');
+
+    
     const handleLogout = async () => {
         try {
             // Remove os dados do AsyncStorage
@@ -57,6 +85,7 @@ export default function Profile({navigation }) {
         } catch (error) {
             console.error('Erro ao realizar logout:', error);
             Alert.alert('Erro ao realizar logout. Tente novamente.');
+
         }
     };
     return (
