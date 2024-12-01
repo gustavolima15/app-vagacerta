@@ -27,7 +27,7 @@ export default function Profile({navigation }) {
                 // Recupera o usuário do AsyncStorage
                 const jsonValue = await AsyncStorage.getItem('user');
                 const user = JSON.parse(jsonValue);
-const response = await api.get(/usuarios/${user.id});
+                const response = await api.get(/usuarios/${user.id});
                 const userData = response.data;
 
                 // Atualiza os estados com os dados do usuário
@@ -41,6 +41,24 @@ const response = await api.get(/usuarios/${user.id});
 
         getData();
     }, []);
+    const handleLogout = async () => {
+        try {
+            // Remove os dados do AsyncStorage
+            await AsyncStorage.removeItem('token');
+            await AsyncStorage.removeItem('user');
+
+            // Redireciona para a tela de login
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+            });
+
+            Alert.alert('Logout realizado com sucesso!');
+        } catch (error) {
+            console.error('Erro ao realizar logout:', error);
+            Alert.alert('Erro ao realizar logout. Tente novamente.');
+        }
+    };
     return (
         <Wrapper>
             <Header>
