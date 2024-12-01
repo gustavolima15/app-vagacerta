@@ -16,7 +16,31 @@ import { Button } from '../../components/Button';
 
 
 export default function Profile({navigation }) {
+    const [id, setId] = useState(null);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                // Recupera o usuário do AsyncStorage
+                const jsonValue = await AsyncStorage.getItem('user');
+                const user = JSON.parse(jsonValue);
+const response = await api.get(/usuarios/${user.id});
+                const userData = response.data;
+
+                // Atualiza os estados com os dados do usuário
+                setId(userData.id);
+                setName(userData.nome);
+                setEmail(userData.email);
+            } catch (e) {
+                console.error('Erro ao buscar dados do usuário:', e);
+            }
+        };
+
+        getData();
+    }, []);
     return (
         <Wrapper>
             <Header>
